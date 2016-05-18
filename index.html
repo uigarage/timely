@@ -132,6 +132,19 @@ kbd.green {
 	background: #2ecc71;
 }
 
+.btn-mod {
+	width: 100%;
+	padding: 10px;
+}
+
+.btn-green {
+	background: #39d179;
+}
+
+.btn-red {
+	background: #e74c3c;
+}
+
 /* Medium devices (desktops, 992px and up) */
 @media (min-width: @screen-md-min) {
     .container {
@@ -227,10 +240,10 @@ kbd.green {
 		<div id="btnWrapper" class="row row-modified">
 			<div class="col-xs-2 col-md-2">&nbsp;</div>
 			<div class="col-xs-4 col-md-4">
-				<input type="button" id="btnCalculate" class="btn btn-success" style="width: 100%"value="Calculate" />  
+				<input type="button" id="btnCalculate" class="btn btn-success btn-mod btn-green" style="width: 100%"value="Calculate" />  
 			</div>	
 			<div class="col-xs-4 col-md-4">
-				<input type="button" id="" class="btn btn-danger" style="width: 100%" value="Reset" data-toggle="modal" data-target="#resultPopUp" />  
+				<input type="button" id="" class="btn btn-danger btn-mod btn-red" style="width: 100%" value="Reset" data-toggle="modal" data-target="#resultPopUp" />  
 			</div>
 			<div class="col-xs-2 col-md-2">&nbsp;</div>
 		</div>
