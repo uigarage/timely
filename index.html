@@ -234,6 +234,10 @@ kbd.green {
 			</div>
 			<div class="col-xs-2 col-md-2">&nbsp;</div>
 		</div>
+		
+		<div class="text-center">
+			<h6><small>Version: &beta;</small></h6>
+		</div>
 	</div>
 
 	
@@ -295,22 +299,20 @@ var rfacts	= [
 var patternize = function(obj) {
 	var v = obj.val(),
 		tPattern = /^(\d{1,2}):(\d{1,2})$/;
-		
+
+	obj.removeClass('invalid-entry');
+	
 	if( v.match(tPattern) === null ) {
 		//	either the textbox is empty
-		if( v.length == 0 ) {
-		} else {
+		if( v.length > 0 ) {
 			//	invalid string
-			//console.log('In Valid Entry');
 			obj.addClass('invalid-entry');
 		}
-	} else {
-		obj.removeClass('invalid-entry');
 	}
 };
 
 $('.txtTime').on('change', function(e) {
-	patternize($(this));	
+	patternize($(this));
 });
 
 $('#btnCalculate').click(function(e) {
@@ -332,7 +334,8 @@ $('#btnCalculate').click(function(e) {
 		reqMins	= 0,
 		reqHrs = 0,
 		actualTotalMins = 0,
-		$hrs, $mins, rnum
+		$hrs, $mins, rnum, 
+		isValidHrs = true
 	;
     
     for(var i =0, n=txtTime.length; i<n; i++) {
@@ -342,6 +345,12 @@ $('#btnCalculate').click(function(e) {
 			patternize(t);
 			numOfTime++;
 			arrTime	= strTime.split(':');
+			
+			if(parseInt(arrTime[0], 10) > 16 || parseInt(arrTime[1], 10) > 59) {
+				isValidHrs = false;
+				t.addClass('invalid-entry');				
+			}
+			
 			arrMins.push( parseInt(arrTime[0]*60, 10) + parseInt(arrTime[1], 10));
 		}
     }
@@ -379,7 +388,7 @@ $('#btnCalculate').click(function(e) {
 	
 	
 	actualTotalMins	= (hours * 60 ) +  minutes;
-	if( !isNaN(avgHrs) ) {
+	if( !isNaN(avgHrs) && isValidHrs) {
 		
 		//	Show the results
 		if( actualTotalMins < reqTotalMins ) {
