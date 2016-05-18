@@ -1,24 +1,415 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Time Sheet</title>
 
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <title>Timely.GitHub.io by uigarage</title>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<style>
+#wrapper {
+    padding: 20px;
+}
+#inputList {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+#inputList li {
+    margin-bottom: 5px;
+}
+.txtTime {} .container {} .main {
+    background: #fff;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+.emerald {
+    /*#39d179*/
+    
+    padding-top: 0;
+    padding-right: 0;
+    padding-left: 0;
+}
+.emerald h3 {
+    margin: 0;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+.emerald h4 {
+    color: #fff;
+    margin: 0;
+    padding-bottom: 10px;
+    font-size: 14px;
+}
+#logoHeadShot {
+    color: #2c3e50;
+}
+
+h3 {
+	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+.day-label {
+    text-align: right;
+    padding-top: 6px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.row-modified {
+    margin-right: 0;
+    margin-left: 0;
+}
+.day-wrapper {
+    margin-bottom: 10px;
+}
+#btnWrapper {
+    margin-top: 25px;
+}
+
+.invalid-entry {
+	border: 1px solid #ff0000;
+}
+
+/*	Modal Dialog central align vertical */
+/*
+.vertical-alignment-helper {
+    display: table;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+}
+.vertical-align-center {
+    /* To center vertically */
+    
+    display: table-cell;
+    vertical-align: middle;
+    pointer-events: none;
+}
+*/
+.modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    
+    width: inherit;
+    height: inherit;
+    /* To center horizontally */
+    
+    margin: 0 auto;
+    pointer-events: all;
+}
+/* Modal dialog modifications */
+.modal-header {
+    padding: 8px;
+    border-top: none;
+}
+.modal-body {
+    padding: 8px;
+    border-top: none;
+}
+.modal-footer {
+    padding: 8px;
+    border-top: none;
+}
+
+.modal-content {
+	border-radius: 2px;
+}
+
+kbd.red {
+	background: #e74c3c;
+}
+
+kbd.green {
+	background: #2ecc71;
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: @screen-md-min) {
+    .container {
+        width: 960px !important;
+    }
+}
+@media (min-width: 1200px) {
+    .container {
+        width: 768px;
+    }
+}
+</style>
+	
   </head>
-
   <body>
+    <div class="main container emerald"> 
+		<div class="hidden" style="padding-top: 8px; background-color: #39d179; border-bottom: 10px solid #27ae60;">
+			<h3>Timely</h3>
+			<div id="logoHeadShot" class="text-center">
+					<samp>It's time to track your time</samp>
+			</div>			
+		</div>
+		
+		<div >
+			<div class="row row-modified" style="margin-top: 25px;">
+				<div class="col-xs-12 col-md-12 text-center">
+					<samp>Please enter your times in HH:MM format.</samp>
+				</div>
+			</div>
+			<div class="row row-modified day-wrapper" style="margin-top: 25px;">
+				<div class="col-xs-3 col-md-3 day-label">
+					Mon
+				</div>
+				<div class="col-xs-7 col-md-7">
+					<input class="txtTime form-control" type="text" placeholder="HH:MM" value="9:00"/>					
+				</div>
+				<div class="col-xs-1 col-md-1">
+					&nbsp;
+				</div>
+			</div>
+			
+			<div class="row row-modified day-wrapper">
+				<div class="col-xs-3 col-md-3 day-label">
+					Tue
+				</div>
+				<div class="col-xs-7 col-md-7">
+					<input class="txtTime form-control" type="text" placeholder="HH:MM" value="9:00"/>
+				</div>
+				<div class="col-xs-1 col-md-1">
+					&nbsp;
+				</div>
+			</div>
+			
+			<div class="row row-modified day-wrapper">
+				<div class="col-xs-3 col-md-3 day-label">
+					Wed
+				</div>
+				<div class="col-xs-7 col-md-7">
+					<input class="txtTime form-control" type="text" placeholder="HH:MM" value="9:00"/>
+				</div>
+				<div class="col-xs-1 col-md-1">
+					&nbsp;
+				</div>
+			</div>
+			
+			<div class="row row-modified day-wrapper">
+				<div class="col-xs-3 col-md-3 day-label">
+					Thur
+				</div>
+				<div class="col-xs-7 col-md-7">
+					<input class="txtTime form-control" type="text" placeholder="HH:MM" value="9:00"/>
+				</div>
+				<div class="col-xs-1 col-md-1">
+					&nbsp;
+				</div>
+			</div>
+			
+			<div class="row row-modified day-wrapper">
+				<div class="col-xs-3 col-md-3 day-label">
+					Fri
+				</div>
+				<div class="col-xs-7 col-md-7">
+					<input class="txtTime form-control" type="text" placeholder="HH:MM" value=""/>
+				</div>
+				<div class="col-xs-1 col-md-1">
+					&nbsp;
+				</div>
+			</div>
+		
+		</div>
+		
+		
+		<div id="btnWrapper" class="row row-modified">
+			<div class="col-xs-2 col-md-2">&nbsp;</div>
+			<div class="col-xs-4 col-md-4">
+				<input type="button" id="btnCalculate" class="btn btn-success" style="width: 100%"value="Calculate" />  
+			</div>	
+			<div class="col-xs-4 col-md-4">
+				<input type="button" id="" class="btn btn-danger" style="width: 100%" value="Reset" data-toggle="modal" data-target="#resultPopUp" />  
+			</div>
+			<div class="col-xs-2 col-md-2">&nbsp;</div>
+		</div>
+	</div>
 
-    <header>
-      <div class="container">
-        <h1>Timely</h1>
-        <h2></h2>
-        Welcome
-      </div>
-       
+	
+<div id="resultPopUp" class="modal fade" tabindex="-1" role="dialog">
+	<div class="vertical-alignment-helper">
+	  <div class="modal-dialog vertical-align-center">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			
+		  </div>
+		  <div class="modal-body">
+			<div id="lessHrs" class="row row-modified hidden">
+				<div class="col-xs-1 col-md-1">&nbsp;</div>
+				<div class="col-xs-10 col-md-10"><h3 class="text-center">You are falling short of <kbd class="red hrs" >9 hrs</kbd> and <kbd class="red mins" >30 mins</kbd> in your timings &hellip;</h3></div>
+				<div class="col-xs-1 col-md-1">&nbsp;</div>
+				<div class="clearfix"></div>
+				<div class="text-center">
+					<samp>&lbrace; May the force be with you &rcub;</samp>
+				</div>
+			</div>
+			
+			<div id="moreHrs" class="row row-modified hidden">
+				<div class="col-xs-1 col-md-1">&nbsp;</div>
+				<div class="col-xs-10 col-md-10"><h3 class="text-center">Your weekly average is <kbd class="green hrs" >9 hrs</kbd> and <kbd class="green mins" >30 mins</kbd></h3></div>
+				<div class="col-xs-1 col-md-1">&nbsp;</div>
+				<div class="clearfix"></div>
+				<div class="text-center">
+					<samp>&lbrace; Congratts buddy!!! but don't think you can impress your superiors with your extra hours. &rcub;</samp>
+				</div>
+			</div>
+			
+			<div style="margin-top: 15px;" class="text-center">
+				<samp>Random facts: </samp> <samp id="randFacts">why have abs when u can have kebabs</samp>
+			</div>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		  </div>
+		</div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div>
+</div><!-- /.modal -->
+
+	
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>	
+<script>
+
+var rfacts	= [
+'If i swallow magnets will i become attractive',
+'I hate when i lose things at school like my pencils and papers and life ambitions',
+'Running seems like a great idea until u actually start running',
+'What do u mean im still fat i did a sit up 3 years ago',
+'Never stop pushing urself. Some say 8 hrs of sleep is enough. Y stop there? Y not 9? 10? Strive for greatness.'
+]
+
+var patternize = function(obj) {
+	var v = obj.val(),
+		tPattern = /^(\d{1,2}):(\d{1,2})$/;
+		
+	if( v.match(tPattern) === null ) {
+		//	either the textbox is empty
+		if( v.length == 0 ) {
+		} else {
+			//	invalid string
+			//console.log('In Valid Entry');
+			obj.addClass('invalid-entry');
+		}
+	} else {
+		obj.removeClass('invalid-entry');
+	}
+};
+
+$('.txtTime').on('change', function(e) {
+	patternize($(this));	
+});
+
+$('#btnCalculate').click(function(e) {
+	var txtTime = $('.txtTime'),
+		numOfTime = 0,
+		t, strTime = '', 
+		arrHrs	= [], 
+		arrMins = [], 
+		arrTime = [],
+		totalHrs = 0, 
+		totalMins = 0, 
+		weeklyAvg = 0,
+		reqWeeklyAvg = 45,
+		lessHrs	= $('#lessHrs'),
+		moreHrs = $('#moreHrs'),
+		minutes = 0, hours = 0, avgHrs = 0, avgMins = 0,  
+		reqTotalMins = 2700,
+		diffOfMins=0, 
+		reqMins	= 0,
+		reqHrs = 0,
+		actualTotalMins = 0,
+		$hrs, $mins, rnum
+	;
+    
+    for(var i =0, n=txtTime.length; i<n; i++) {
+    	t	= txtTime.eq(i);
+		strTime	= t.val();
+		if(strTime != '' ) {
+			patternize(t);
+			numOfTime++;
+			arrTime	= strTime.split(':');
+			arrMins.push( parseInt(arrTime[0]*60, 10) + parseInt(arrTime[1], 10));
+		}
+    }
+    
+    for(i = 0; i < arrMins.length; i++) {
+    	totalMins+= parseInt(arrMins[i], 10);
+    }
+	
+	minutes	= totalMins % 60;
+	hours	= (totalMins - minutes) / 60;
+	avgHrs	= Math.floor(hours / numOfTime);
+	avgMins	= Math.ceil( (totalMins / numOfTime) % 60);
+	diffOfMins	= (60 - minutes);	
+	
+	//console.log('MINs: ' + minutes);
+	//console.log('HRS: ' + hours);
+	//console.log('WEEKLY AVG: ' + avgHrs + ":" + avgMins);
+	//console.log('No of Items: ' + numOfTime);
+
+	
+	if( diffOfMins === 60 ) {
+		reqMins	= 0;
+	}
+	
+	reqHrs	= ((reqWeeklyAvg - hours) )
+	if( diffOfMins > 0 && diffOfMins < 60 ) {
+		reqHrs = reqHrs -1;
+		reqMins = diffOfMins;
+	}
+
+	//console.log('Required HRS: ' + reqWeeklyAvg);
+	//console.log('Diff Mins: ' + diffOfMins);
+	//console.log('Req Hrs: ' + reqHrs);
+	//console.log('Req Mins: ' + reqMins);
+	
+	
+	actualTotalMins	= (hours * 60 ) +  minutes;
+	if( !isNaN(avgHrs) ) {
+		
+		//	Show the results
+		if( actualTotalMins < reqTotalMins ) {
+			lessHrs.removeClass('hidden');
+			moreHrs.addClass('hidden');
+			$hrs	= lessHrs.find('kbd.hrs');
+			$mins	= lessHrs.find('kbd.mins');
+			
+			$hrs.html(reqHrs + ' hrs');
+			$mins.html(reqMins + ' mins');
+		} else {
+			moreHrs.removeClass('hidden');
+			lessHrs.addClass('hidden');
+			
+			$hrs	= moreHrs.find('kbd.hrs');
+			$mins	= moreHrs.find('kbd.mins');
+			
+			$hrs.html(avgHrs + ' hrs');
+			$mins.html(avgMins + ' mins');
+		}	
+		
+		$('#resultPopUp').modal({show: true});
+	} else {
+		
+	}
+	//	Rand Facts
+	rnum = Math.floor(Math.random() * ((rfacts.length -1)- 1 + 1)) + 1;
+	$('#randFacts').html(rfacts[rnum]);
+});
+</script>
   </body>
 </html>
