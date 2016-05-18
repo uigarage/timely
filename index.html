@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Time Sheet</title>
+    <title>Timely: an hours difference engine</title>
 
     <!-- Bootstrap -->
 	<!-- Latest compiled and minified CSS -->
@@ -179,7 +179,7 @@ kbd.green {
 					Mon
 				</div>
 				<div class="col-xs-7 col-md-7">
-					<input class="txtTime form-control" type="text" placeholder="HH:MM" value="9:00"/>					
+					<input class="txtTime form-control" type="text" placeholder="HH:MM" value=""/>					
 				</div>
 				<div class="col-xs-1 col-md-1">
 					&nbsp;
@@ -191,7 +191,7 @@ kbd.green {
 					Tue
 				</div>
 				<div class="col-xs-7 col-md-7">
-					<input class="txtTime form-control" type="text" placeholder="HH:MM" value="9:00"/>
+					<input class="txtTime form-control" type="text" placeholder="HH:MM" value=""/>
 				</div>
 				<div class="col-xs-1 col-md-1">
 					&nbsp;
@@ -203,7 +203,7 @@ kbd.green {
 					Wed
 				</div>
 				<div class="col-xs-7 col-md-7">
-					<input class="txtTime form-control" type="text" placeholder="HH:MM" value="9:00"/>
+					<input class="txtTime form-control" type="text" placeholder="HH:MM" value=""/>
 				</div>
 				<div class="col-xs-1 col-md-1">
 					&nbsp;
@@ -215,7 +215,7 @@ kbd.green {
 					Thur
 				</div>
 				<div class="col-xs-7 col-md-7">
-					<input class="txtTime form-control" type="text" placeholder="HH:MM" value="9:00"/>
+					<input class="txtTime form-control" type="text" placeholder="HH:MM" value=""/>
 				</div>
 				<div class="col-xs-1 col-md-1">
 					&nbsp;
@@ -243,7 +243,7 @@ kbd.green {
 				<input type="button" id="btnCalculate" class="btn btn-success btn-mod btn-green" style="width: 100%"value="Calculate" />  
 			</div>	
 			<div class="col-xs-4 col-md-4">
-				<input type="button" id="" class="btn btn-danger btn-mod btn-red" style="width: 100%" value="Reset" data-toggle="modal" data-target="#resultPopUp" />  
+				<input type="button" id="btnReset" class="btn btn-danger btn-mod btn-red" style="width: 100%" value="Reset" />  
 			</div>
 			<div class="col-xs-2 col-md-2">&nbsp;</div>
 		</div>
@@ -265,20 +265,20 @@ kbd.green {
 		  <div class="modal-body">
 			<div id="lessHrs" class="row row-modified hidden">
 				<div class="col-xs-1 col-md-1">&nbsp;</div>
-				<div class="col-xs-10 col-md-10"><h3 class="text-center">You are falling short of <kbd class="red hrs" >9 hrs</kbd> and <kbd class="red mins" >30 mins</kbd> in your timings &hellip;</h3></div>
+				<div class="col-xs-10 col-md-10"><h4 class="text-center">You are falling short of <kbd class="red hrs" >9 hrs</kbd> and <kbd class="red mins" >30 mins</kbd> in your timings &hellip;</h4></div>
 				<div class="col-xs-1 col-md-1">&nbsp;</div>
 				<div class="clearfix"></div>
-				<div class="text-center">
+				<div style="margin-top: 15px;" class="text-center">
 					<samp>&lbrace; May the force be with you &rcub;</samp>
 				</div>
 			</div>
 			
 			<div id="moreHrs" class="row row-modified hidden">
 				<div class="col-xs-1 col-md-1">&nbsp;</div>
-				<div class="col-xs-10 col-md-10"><h3 class="text-center">Your weekly average is <kbd class="green hrs" >9 hrs</kbd> and <kbd class="green mins" >30 mins</kbd></h3></div>
+				<div class="col-xs-10 col-md-10"><h4 class="text-center">Your weekly average is <kbd class="green hrs" >9 hrs</kbd> and <kbd class="green mins" >30 mins</kbd></h4></div>
 				<div class="col-xs-1 col-md-1">&nbsp;</div>
 				<div class="clearfix"></div>
-				<div class="text-center">
+				<div style="margin-top: 15px;" class="text-center">
 					<samp>&lbrace; Congratts buddy!!! but don't think you can impress your superiors with your extra hours. &rcub;</samp>
 				</div>
 			</div>
@@ -430,6 +430,15 @@ $('#btnCalculate').click(function(e) {
 	//	Rand Facts
 	rnum = Math.floor(Math.random() * ((rfacts.length -1)- 1 + 1)) + 1;
 	$('#randFacts').html(rfacts[rnum]);
+});
+
+$('#btnReset').click(function(e) {
+	var txtTime = $('.txtTime');
+	
+	for(var i =0, n=txtTime.length; i<n; i++) {
+    	t	= txtTime.eq(i);
+		t.val('');
+	}
 });
 </script>
   </body>
