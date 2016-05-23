@@ -372,12 +372,15 @@ $('#btnCalculate').click(function(e) {
     for(i = 0; i < arrMins.length; i++) {
     	totalMins+= parseInt(arrMins[i], 10);
     }
+    
+    	//	Required weekly average, accounting to leaves;
+	reqWeeklyAvg	= 9 * numOfTime;
 	
 	minutes	= totalMins % 60;
 	hours	= (totalMins - minutes) / 60;
 	avgHrs	= Math.floor(hours / numOfTime);
 	avgMins	= Math.ceil( (totalMins / numOfTime) % 60);
-	diffOfMins	= (60 - minutes);	
+	diffOfMins	= (60 - avgMins);	
 	
 	//console.log('MINs: ' + minutes);
 	//console.log('HRS: ' + hours);
