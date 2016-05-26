@@ -170,7 +170,9 @@ kbd.green {
 		<div >
 			<div class="row row-modified" style="margin-top: 25px;">
 				<div class="col-xs-12 col-md-12 text-center">
-					<samp>Please enter your times in HH:MM format.</samp>
+					<samp>Please enter your times in HH:MM format. <br/>
+						For leaves / holidays press <kbd>L</kbd> or <kbd>l</kbd>
+					</samp>
 				</div>
 			</div>
 			<div class="row row-modified day-wrapper" style="margin-top: 25px;">
@@ -269,6 +271,9 @@ kbd.green {
 				<div class="col-xs-1 col-md-1">&nbsp;</div -->
 				<div class="clearfix"></div>
 				<div style="margin-top: 15px;" class="text-center">
+					<samp>Current Weekly Average: <kbd class="weekly-avg"></kbd></samp>
+				</div>
+				<div style="margin-top: 15px;" class="text-center">
 					<samp>&lbrace; May the force be with you &rcub;</samp>
 				</div>
 			</div>
@@ -307,7 +312,11 @@ var rfacts	= [
 'I hate when i lose things at school like my pencils and papers and life ambitions',
 'Running seems like a great idea until u actually start running',
 'What do u mean im still fat i did a sit up 3 years ago',
-'Never stop pushing urself. Some say 8 hrs of sleep is enough. Y stop there? Y not 9? 10? Strive for greatness.'
+'Never stop pushing urself. Some say 8 hrs of sleep is enough. Y stop there? Y not 9? 10? Strive for greatness.',
+'Goals for this year; Less upsetti more spaghetti',
+'Relationship Status: May be one day',
+'With great power comes great electricity bills'
+'How can you face your problem if your problem is your face'
 ]
 
 var patternize = function(obj) {
@@ -326,12 +335,55 @@ var patternize = function(obj) {
 };
 
 $('.txtTime').on('change', function(e) {
-	patternize($(this));
+	isValidTime($(this));
 });
+
+var isValidTime	= function(obj) {
+	var v = obj.val(),
+		tPattern = /^(\d{1,2})[:|.]?(\d{1,2})?$/,
+		reMatches	= [],
+		hrs	= 0, mins = 0,
+		retn = null;
+	
+	obj.removeClass('invalid-entry');
+	
+	reMatches	= v.match(tPattern);
+	
+	console.log(reMatches);
+	
+	if( reMatches === null ) {
+		//	if the matches returns null
+		//	Check if it matches 'L' 'HL'		
+		
+		if( v === 'L' || v === 'l') {
+			retn	= 'L'
+		} else {
+			if( v.length > 0 ) {
+				obj.addClass('invalid-entry');
+				retn	= null
+			}
+		}	
+	} else {
+		//	if the matches returns valid HH:MM format
+		hrs	= parseInt(reMatches[1], 10);
+		mins = parseInt( !reMatches[2] ? 0 : reMatches[2] , 10);
+		
+		retn	= [hrs, mins];
+		
+		if( hrs > 16 || mins > 59 ) {
+			obj.addClass('invalid-entry');
+			retn	= null;
+		}
+	}
+	
+	return retn;	
+};
 
 $('#btnCalculate').click(function(e) {
 	var txtTime = $('.txtTime'),
+		numOfEmpties = 0,
 		numOfTime = 0,
+		numOfLeaves = 0,
 		t, strTime = '', 
 		arrHrs	= [], 
 		arrMins = [], 
@@ -355,26 +407,54 @@ $('#btnCalculate').click(function(e) {
     for(var i =0, n=txtTime.length; i<n; i++) {
     	t	= txtTime.eq(i);
 		strTime	= t.val();
+		
+		strTime	= isValidTime(t);
+		
+		if( strTime !== null ) {
+		
+			if( typeof strTime === 'object') {
+				numOfTime++;
+				arrMins.push( (strTime[0]*60) + strTime[1]);
+			} else if( typeof strTime === 'string' ) {
+				if( strTime === 'L' ||  strTime === 'l') {
+					numOfLeaves++;
+				}
+			}			
+		} else {
+			numOfEmpties++;
+		}
+		
+		/*
 		if(strTime != '' ) {
 			patternize(t);
-			numOfTime++;
-			arrTime	= strTime.split(':');
 			
-			if(parseInt(arrTime[0], 10) > 16 || parseInt(arrTime[1], 10) > 59) {
-				isValidHrs = false;
-				t.addClass('invalid-entry');				
+			if( strTime === 'L' ||  strTime === 'l') {
+				numOfLeaves++;
+			} else {
+				numOfTime++;
+				arrTime	= strTime.split(':');
+				
+				if(parseInt(arrTime[0], 10) > 16 || parseInt(arrTime[1], 10) > 59) {
+					isValidHrs = false;
+					t.addClass('invalid-entry');				
+				} else {
+					arrMins.push( parseInt(arrTime[0]*60, 10) + parseInt(arrTime[1], 10));
+				}
 			}
 			
-			arrMins.push( parseInt(arrTime[0]*60, 10) + parseInt(arrTime[1], 10));
+		} else {
+			numOfEmpties++;
 		}
+		*/
     }
     
     for(i = 0; i < arrMins.length; i++) {
     	totalMins+= parseInt(arrMins[i], 10);
     }
     
-    	//	Required weekly average, accounting to leaves;
-	reqWeeklyAvg	= 9 * numOfTime;
+    //	Required weekly average, accounting to leaves;
+	reqWeeklyAvg	= (9 * (numOfTime + numOfEmpties));
+	reqTotalMins	= (reqWeeklyAvg * 60);
 	
 	minutes	= totalMins % 60;
 	hours	= (totalMins - minutes) / 60;
@@ -382,11 +462,13 @@ $('#btnCalculate').click(function(e) {
 	avgMins	= Math.ceil( (totalMins / numOfTime) % 60);
 	diffOfMins	= (60 - avgMins);	
 	
+	//console.log(' ');
 	//console.log('MINs: ' + minutes);
-	//console.log('HRS: ' + hours);
+	//console.log('HRS: ' + hours);	
 	//console.log('WEEKLY AVG: ' + avgHrs + ":" + avgMins);
+	//console.log('reqWeeklyAvg: ' + reqWeeklyAvg);
 	//console.log('No of Items: ' + numOfTime);
-
+	//console.log('No of Leaves: ' + numOfLeaves);
 	
 	if( diffOfMins === 60 ) {
 		reqMins	= 0;
@@ -398,13 +480,13 @@ $('#btnCalculate').click(function(e) {
 		reqMins = diffOfMins;
 	}
 
-	//console.log('Required HRS: ' + reqWeeklyAvg);
 	//console.log('Diff Mins: ' + diffOfMins);
 	//console.log('Req Hrs: ' + reqHrs);
 	//console.log('Req Mins: ' + reqMins);
 	
-	
 	actualTotalMins	= (hours * 60 ) +  minutes;
+	//console.log('Actual Total Mins: ' + actualTotalMins);
+	//console.log('Reqird Total Mins: ' + reqTotalMins);
 	if( !isNaN(avgHrs) && isValidHrs) {
 		
 		//	Show the results
@@ -413,9 +495,11 @@ $('#btnCalculate').click(function(e) {
 			moreHrs.addClass('hidden');
 			$hrs	= lessHrs.find('kbd.hrs');
 			$mins	= lessHrs.find('kbd.mins');
+			$wavg	= lessHrs.find('kbd.weekly-avg');
 			
 			$hrs.html(reqHrs + ' hrs');
 			$mins.html(reqMins + ' mins');
+			$wavg.html( avgHrs + ":" + avgMins );
 		} else {
 			moreHrs.removeClass('hidden');
 			lessHrs.addClass('hidden');
@@ -431,6 +515,8 @@ $('#btnCalculate').click(function(e) {
 	} else {
 		
 	}
+	
+	//console.log('---------------------------------------------------');
 	//	Rand Facts
 	rnum = Math.floor(Math.random() * ((rfacts.length -1)- 1 + 1)) + 1;
 	$('#randFacts').html(rfacts[rnum]);
