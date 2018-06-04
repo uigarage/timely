@@ -1,3 +1,68 @@
+$scope.calculateEmi = function() {
+        console.log('Calculate EMI');
+        
+        //  Preset values
+        // $scope.emi.loanAmount = 260000;
+        // $scope.emi.interest = 10.2;
+        // $scope.emi.months = 36;
+
+        console.log($scope.emi);
+
+        // var r = 0,
+        //     months = 0,
+        //     emi = '';
+
+        // months = $scope.emi.months;
+        
+        // r = ($scope.emi.interest / months) / 100;
+        // n = months;
+        // emi = ($scope.emi.loanAmount * r * ( (1 + r) * n ) )/ ( (1 + r) * n  - 1);
+        // console.log(emi);
+        console.log($scope.emi.periodSelected);
+        var loanAmount = $scope.emi.loanAmount,
+            numberOfMonths = 0,
+            rateOfInterest = $scope.emi.interest,
+            monthlyInterestRatio = rateOfInterest / 100 / 12,
+            top, bottom, sp, emi, full, interest, int_pge;
+
+        numberOfMonths = $scope.emi.months;
+		top = Math.pow(1 + monthlyInterestRatio, numberOfMonths);
+		bottom = top - 1;
+        sp = top / bottom;
+        emi = loanAmount * monthlyInterestRatio * sp;
+        
+        full = numberOfMonths * emi;
+		interest = full - loanAmount;
+		int_pge = interest / full * 100;
+        
+        //$("#tbl_int_pge").html(int_pge.toFixed(2) + " %");
+		//$("#tbl_loan_pge").html((100-int_pge.toFixed(2))+" %");
+
+		var emi_str = emi
+			.toFixed(2)
+			.toString()
+			.replace(/,/g, "")
+			.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		var loanAmount_str = loanAmount
+			.toString()
+			.replace(/,/g, "")
+			.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		var full_str = full
+			.toFixed(2)
+			.toString()
+			.replace(/,/g, "")
+			.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		var int_str = interest
+			.toFixed(2)
+			.toString()
+			.replace(/,/g, "")
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            
+        console.log(emi);
+        console.log(emi_str);
+        console.log(loanAmount_str);
+    };
+
 number2text(value) {
     var fraction = Math.round(this.frac(value)*100);
     var f_text  = "";
